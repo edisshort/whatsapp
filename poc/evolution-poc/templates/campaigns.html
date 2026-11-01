@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block page_title %}Campaigns{% endblock %}
+{% block content %}
+<div class="panel table-responsive"><table class="table"><thead><tr><th>Name</th><th>Status</th><th></th></tr></thead><tbody>
+{% for c in campaigns %}<tr><td>{{ c.name }}</td><td>{{ c.status }}</td><td><a href="{{ url_for('campaigns.detail', campaign_id=c.id) }}">Report</a></td></tr>
+{% else %}<tr><td colspan="3" class="text-muted">No campaigns yet.</td></tr>{% endfor %}
+</tbody></table></div>
+{% endblock %}

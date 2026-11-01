@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block page_title %}Dashboard{% endblock %}
+{% block content %}
+<div class="row g-3">
+  <div class="col-6 col-md-3"><div class="stat-card"><span>Contacts cached</span><strong>{{ contacts }}</strong></div></div>
+  <div class="col-6 col-md-3"><div class="stat-card"><span>Campaigns</span><strong>{{ campaigns }}</strong></div></div>
+  <div class="col-6 col-md-3"><div class="stat-card"><span>Sent</span><strong>{{ sent }}</strong></div></div>
+  <div class="col-6 col-md-3"><div class="stat-card stat-fail"><span>Failed</span><strong>{{ failed }}</strong></div></div>
+</div>
+<div class="panel mt-3">
+  <p><strong>Engine:</strong> {{ engine }} @ {{ engine_url }}</p>
+  <p><strong>Session status:</strong> {{ session_info.get('status', 'unknown') }}</p>
+  <p><strong>WAHA health:</strong> {{ 'OK' if health.ok else health.get('error', 'down') }}</p>
+  <a class="btn btn-wa" href="{{ url_for('connect.index') }}">Connect WhatsApp</a>
+</div>
+<div class="alert alert-warning small mt-3">Unofficial WhatsApp Web API — use a test number. Not Meta Cloud API.</div>
+{% endblock %}

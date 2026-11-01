@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block page_title %}Compose & Send{% endblock %}
+{% block content %}
+<div class="row g-3">
+  <div class="col-lg-6"><div class="panel">
+    <h3 class="h6">Send one message</h3>
+    <form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="action" value="single">
+      <select class="form-select mb-2" name="chat_id" required><option value="">Select contact</option>
+        {% for c in contacts %}<option value="{{ c.chat_id }}">{{ c.name }} ({{ c.phone }})</option>{% endfor %}
+      </select>
+      <textarea class="form-control mb-2" name="message" rows="4" required placeholder="Message text"></textarea>
+      <button class="btn btn-wa">Send now</button>
+    </form>
+  </div></div>
+  <div class="col-lg-6"><div class="panel">
+    <h3 class="h6">Bulk campaign</h3>
+    <form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="action" value="campaign">
+      <input class="form-control mb-2" name="campaign_name" placeholder="Campaign name">
+      <textarea class="form-control mb-2" name="message" rows="3" required placeholder="Message text"></textarea>
+      <input type="search" class="form-control mb-2" id="contactSearch" placeholder="Search contacts" autocomplete="off">
+      <label class="d-block small mb-2" id="selectAllWrap" style="display:none">
+        <input type="checkbox" id="selectAllVisible"> Select all listed
+      </label>
+      <div class="mb-2" style="max-height:220px;overflow:auto" id="contactList">
+        {% for c in contacts %}
+        <label class="d-block contact-row" data-search="{{ (c.name ~ ' ' ~ c.phone)|lower|e }}">
+          <input type="checkbox" class="contact-cb" name="contact_ids" value="{{ c.id }}"> {{ c.name }} ({{ c.phone }})
+        </label>
+        {% else %}
+        <p class="text-muted small">No contacts — sync from WhatsApp first.</p>
+        {% endfor %}
+      </div>
+      <button class="btn btn-wa">Queue campaign</button>
+    </form>
+  </div></div>
+</div>
+<script>
+(function () {
+  var search = document.getElementById("contactSearch");
+  if (!search) return;
+
+  function rows() {
+    return Array.from(document.querySelectorAll("#contactList .contact-row"));
+  }
+
+  function rowHaystack(row) {
+    return (row.getAttribute("data-search") || "").toLowerCase();
+  }
+
+  function visibleRows() {
+    return rows().filter(function (row) { return !row.classList.contains("contact-row-hidden"); });
+  }
+
+  function apply() {
+    var q = (search.value || "").trim().toLowerCase();
+    var visible = 0;
+    rows().forEach(function (row) {
+      var ok = !q || rowHaystack(row).indexOf(q) !== -1;
+      row.classList.toggle("contact-row-hidden", !ok);
+      row.style.display = ok ? "" : "none";
+      if (ok) visible++;
+    });
+    var wrap = document.getElementById("selectAllWrap");
+    if (wrap) wrap.style.display = q ? "" : "none";
+    var selAll = document.getElementById("selectAllVisible");
+    if (selAll && q) {
+      var vis = visibleRows();
+      var allChecked = vis.length > 0 && vis.every(function (row) {
+        var cb = row.querySelector(".contact-cb");
+        return cb && cb.checked;
+      });
+      selAll.checked = allChecked;
+    }
+  }
+
+  search.addEventListener("input", apply);
+  search.addEventListener("search", apply);
+
+  document.getElementById("selectAllVisible")?.addEventListener("change", function (e) {
+    visibleRows().forEach(function (row) {
+      var cb = row.querySelector(".contact-cb");
+      if (cb) cb.checked = e.target.checked;
+    });
+  });
+
+  apply();
+})();
+</script>
+{% endblock %}

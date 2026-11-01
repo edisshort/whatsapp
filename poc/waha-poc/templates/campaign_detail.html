@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block page_title %}Campaign {{ campaign.name }}{% endblock %}
+{% block content %}
+<div class="panel mb-3"><strong>Status:</strong> {{ campaign.status }}<br><strong>Message:</strong> {{ campaign.message_text }}</div>
+<table class="table table-sm panel"><thead><tr><th>Contact</th><th>Status</th><th>Detail</th></tr></thead><tbody>
+{% for m in messages %}<tr><td>{{ m.contact.name if m.contact else m.chat_id }}</td><td>{{ m.status }}</td><td class="small">{{ m.detail }}</td></tr>{% endfor %}
+</tbody></table>
+{% endblock %}

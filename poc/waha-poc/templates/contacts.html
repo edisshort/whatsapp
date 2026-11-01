@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block page_title %}Contacts{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap gap-2 mb-3">
+  <form method="post" action="{{ url_for('contacts.sync') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-wa">Sync from WhatsApp</button></form>
+  <form method="post" action="{{ url_for('contacts.clear') }}" onsubmit="return confirm('Delete all cached contacts and campaign history on this device?')"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-outline-danger">Clear local cache</button></form>
+</div>
+<p class="small text-muted">Cached in SQLite on this laptop — logout does not remove contacts unless you clear cache.</p>
+<div class="panel table-responsive"><table class="table table-sm"><thead><tr><th>Name</th><th>Phone</th><th>Chat ID</th></tr></thead><tbody>
+{% for c in contacts %}<tr><td>{{ c.name }}</td><td>{{ c.phone }}</td><td><code>{{ c.chat_id }}</code></td></tr>
+{% else %}<tr><td colspan="3" class="text-muted">No contacts — connect WhatsApp then Sync.</td></tr>{% endfor %}
+</tbody></table></div>
+{% endblock %}

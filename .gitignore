@@ -1,0 +1,51 @@
+# --- Secrets & local config ---
+.env
+.env.*
+!.env.example
+**/waha-env/.env
+**/waha-env/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+env/
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.log
+
+# --- App data (SQLite) ---
+**/data/
+**/data/*.db
+**/database/*.db
+**/database/*.sqlite
+
+# --- OS & editors ---
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# --- Temp / scratch ---
+_tmp_*
+*.tmp
+poc/scripts/_tmp_*
+
+# --- Optional: uncomment to stop tracking generated comparison exports ---
+# poc/WAHA-vs-Evolution-Comparison.docx
+# poc/WAHA-vs-Evolution-Comparison.pdf

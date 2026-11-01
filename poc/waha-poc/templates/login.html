@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Login — {{ engine_name }} POC{% endblock %}
+{% block page_title %}{% endblock %}
+{% block content %}
+<div class="login-wrap"><div class="card login-card shadow p-4">
+  <h2 class="h5 text-center">{{ engine_name }} POC Login</h2>
+  <form method="post" action="{{ url_for('auth.login') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input class="form-control mb-2" name="username" placeholder="Username" required autocomplete="username">
+    <input class="form-control mb-3" type="password" name="password" placeholder="Password" required autocomplete="current-password">
+    <button type="submit" class="btn btn-wa w-100">Sign in</button>
+  </form>
+  <p class="small text-muted mt-2 mb-0">Default: admin / admin123</p>
+</div></div>
+{% endblock %}

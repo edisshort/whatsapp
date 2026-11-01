@@ -1,0 +1,5 @@
+waha-env/.env
+data/
+__pycache__/
+*.pyc
+.env
